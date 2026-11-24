@@ -1,0 +1,45 @@
+// OpenClaw — конфиг пилота «ИИ-ассистент по объектам»
+// Установка: скопируй содержимое в ~/.openclaw/openclaw.json (слить с существующим!)
+// или выполни: openclaw configure
+{
+  agents: {
+    defaults: {
+      workspace: "~/.openclaw/workspace",
+      userTimezone: "Europe/Moscow",
+    },
+  },
+
+  // ── Мессенджеры ──────────────────────────────────────────────
+  // WhatsApp: видит входящие переписки подключённого номера (linked device, Baileys).
+  // ВАЖНО: используй отдельный номер/аккаунт под агента — риск бана на неофициальном клиенте.
+  channels: {
+    whatsapp: {
+      dmPolicy: "pairing", // первое сообщение нового отправителя — на согласование
+      allowFrom: ["+79001234567"], // номер владельца (кто может управлять)
+      groupPolicy: "allowlist", // группы — только по списку
+      groupAllowFrom: [], // id рабочих групп (семья/стройка) — добавишь позже
+    },
+
+    // Telegram: режим бота (Bot API) — диалог с агентом и группы.
+    // Личные чаты клиента читает tg-ingest (MTProto userbot, см. tg-ingest/ и README).
+    telegram: {
+      // токен задаётся через: openclaw channels add --channel telegram
+      dmPolicy: "pairing",
+      allowFrom: [], // telegram id владельца
+    },
+  },
+
+  // ── Входящие webhooks (для tg-ingest и внешних триггеров) ─────
+  // Токен замени на длинный случайный: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+  hooks: {
+    enabled: true,
+    token: "ЗАМЕНИ_НА_ДЛИННЫЙ_СЛУЧАЙНЫЙ_ТОКЕН",
+    path: "/hooks",
+    allowedAgentIds: ["main"],
+    allowRequestSessionKey: false,
+  },
+
+  // ── Почта (IMAP) ─────────────────────────────────────────────
+  // Подключение: openclaw configure (раздел почты), либо см. docs/automation/imap.md.
+  // imap: { host: "imap.gmail.com", port: 993, user: "...", password: "секрет" },
+}
